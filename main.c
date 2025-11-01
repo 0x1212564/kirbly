@@ -12,10 +12,11 @@
  * 5. Flash (PROGMEM voor 4x 40KB afbeeldingen)
  */
 
-#define F_CPU 32000000UL // 32MHz (Eis)
+#define F_CPU 32000000UL // 32MHz (Eis) - MOET VOOR ALLE INCLUDES!
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <stdbool.h>  // <-- TOEVOEGEN voor bool, true, false
 #include "system.h"
 #include "st7735_driver.h"
 #include "images.h" // Onze "lijm" header
@@ -42,7 +43,8 @@ ISR(PORTD_INT0_vect) {
  * Wordt 50ms na de knopdruk uitgevoerd.
  */
 ISR(TCC0_OVF_vect) {
-    TCC0.INTFLAGS = TC_OVFIF_bm; // Clear de overflow-vlag
+    TCC0.INTFLAGS = TC0_OVFIF_bm; // <-- AANGEPAST: TC0_OVFIF_bm ipv TC_OVFIF_bm
+    
     // 1. Stop de timer
     TCC0.CTRLA = TC_CLKSEL_OFF_gc;
     
